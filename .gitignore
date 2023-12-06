@@ -1,25 +1,33 @@
-# CakePHP 3
+!.gitkeep
+!/storage/wkhtmltox
+/node_modules
+/storage
 
-/vendor/*
-/config/app.php
+/storage/*.key
+/vendor
+.env
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+.editorconfig
+.idea
+.phpstorm.meta.php
+_ide_helper.php
+_ide_helper_models.php
+.log/
+package-lock.json
 
-/tmp/cache/models/*
-!/tmp/cache/models/empty
-/tmp/cache/persistent/*
-!/tmp/cache/persistent/empty
-/tmp/cache/views/*
-!/tmp/cache/views/empty
-/tmp/sessions/*
-!/tmp/sessions/empty
-/tmp/tests/*
-!/tmp/tests/empty
-
-/logs/*
-!/logs/empty
-
-# CakePHP 2
-
-/app/tmp/*
-/app/Config/core.php
-/app/Config/database.php
-/vendors/*
+#Laravel mix
+/public/js
+/public/css
+/public/fonts
+/public/images
+/public/storage
+/public/vendor
+/public/.htaccess
+/public/mix-manifest.json
+/public/*.pdf
+.htaccess
+public/version.txt
