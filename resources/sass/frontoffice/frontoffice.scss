@@ -1,0 +1,130 @@
+
+// TODO: vagy ezt a fonts blokkot kibővíteni és a többi helyről levenni, vagy fordítva:
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables (scss változók: bootstrap alap felülírása!!)
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+// Font awesome
+@import '~@fortawesome/fontawesome-free/css/all.css';
+
+// Datatables
+@import '~datatables.net-dt/css/jquery.dataTables.css';
+
+// Bootstrap datepicker
+@import '~bootstrap-datepicker/dist/css/bootstrap-datepicker.css';
+
+// Bootstrap selectpicker
+@import '~bootstrap-select/dist/css/bootstrap-select.css';
+
+// Bootstrap colorpicker
+@import '~bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css';
+
+// Three state switch
+@import '../global/candlestick/candlestick.css';
+
+// vue-select
+@import "~vue-select/src/scss/vue-select.scss";
+
+// Homex css-ek:
+/*
+Ezek a fájlokban levő url-ek miatt nem műköndek:
+@import 'homex/css/bootstrap-slider.css';
+@import 'homex/css/jquery-ui.css';
+@import 'homex/css/layerslider.css';
+@import 'homex/css/style.css';
+@import 'homex/css/responsive.css';
+@import 'homex/css/owl.carousel.min.css';
+// @import 'homex/css/font-awesome.min.css';
+// @import 'homex/fonts/flaticon/flaticon.css';
+*/
+
+//  vue image lightbox css
+@import '~vue-image-lightbox/dist/vue-image-lightbox.min.css';
+
+.input-group-append > .form-control {
+  -moz-border-radius-topleft: 0;
+  -moz-border-radius-bottomleft: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.navbar-laravel {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+.selectpicker-fix
+{
+  background-color: inherit!important;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+}
+
+.disabled {
+  pointer-events:none;
+  color: #bfcbd9;
+  cursor: not-allowed;
+  background-image: none;
+  background-color: #eef1f6;
+  border-color: #d1dbe5;
+}
+
+
+/* Homex sablon kiegeszitesek */
+
+.dropdown-item:active {
+  color: #8dc63f !important;
+  background-color: #f5f5f5 !important;
+}
+
+.dropdown-item.active,.dropdown-item:active {
+  color: #8dc63f !important;
+  background-color: #f5f5f5 !important;
+}
+
+.input-group-append {
+  margin-left: 0 !important;
+}
+
+.error{
+    color: red !important;
+}
+
+.cookie-consent {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  min-height: 80px;
+  padding: 10px;
+  text-align: center;
+  vertical-align: middle;
+  z-index: 10;
+  background-color: white;
+}
+
+.color-secondery, .color-secondery-a a {
+  color: #555 !important;
+}
+
+#typeMultiselect > div > div.dropdown-menu.show {
+  background: #FFFFFF !important;
+}
+
+#typeMultiselect > div > button.btn.selectpicker-fix.dropdown-toggle.btn-light {
+  color: black !important;
+  padding: 0.250rem .75rem !important;
+}
+
+#furnitureFront > div > div.dropdown-menu.show {
+  background: #FFFFFF !important;
+}
+
+#furnitureFront > div > button.btn.selectpicker-fix.dropdown-toggle.btn-light {
+  color: black;
+  padding: 0.250rem .75rem;
+}

@@ -1,0 +1,290 @@
+@php
+    use App\Models\Enum\RealEstateContractTypeEnum;
+    use App\Models\Enum\RealEstateKitchenTypeEnum;
+    use App\Models\Enum\RealEstateOrientationEnum;
+    /**
+    * @var \App\Models\Route $route
+    * @var string $locale
+    */
+
+    $alphas = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+@endphp
+
+@extends('PrintableDatapages.defaultprintable')
+@section('title', 'Ajánlat út adatlap')
+@section('css-links')
+    <link href="{{ asset(mix('css/global/printable/datapage-real-estates.css')) }}" rel="stylesheet">
+@endsection
+
+@section('content')
+    @foreach($realestateoffer->realEstates as $item)
+        @if(!$loop->first)
+            <div class="new-page"></div>
+        @endif
+        <div class="page">
+            <div class="container pdf-header">
+                <div class="row">
+                    <div class="col-4 pdf-logo">
+                        @if($realestateoffer->crop_logo_included == 1)
+                            <img src="{{ asset('images/logo/realhome-logo01.png') }}"/>
+                        @endif
+                    </div>
+
+                    <div class="offset-3 col-5 pdf-address">
+                        <p>
+                            1095 Budapest, Lechner Ödön fasor 2.<br/>
+                            +36 70 335 8000, +36 1 335 8000<br/>
+                            web: realhome.hu, email: info@realhome.hu
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {{-- ingatlan adatlap tartalmi rész --}}
+            <div class="container pdf-content">
+                {{-- ingatlan rövid leírás/cím és id --}}
+                <div class="row">
+                    <div class="col-8 pdf-public-name">
+                        <h3>{{ $item->getPublicName() }}</h3>
+                    </div>
+                    <div class="col-4 pdf-code text-right">
+                        <h3>ID: {{ $item->code }}</h3>
+                    </div>
+                </div>
+                {{-- főkép --}}
+                <div class="row">
+                    <div class="col-12">
+                        <div class="pdf-main-image">
+                            {{-- TODO: csinálni ilyen képméretet getPublicPrintableFeaturedImage --}}
+                            {{-- <img src="{{ asset( $item->getPublicPrintableFeaturedImage('images/no-pics/no-pic.jpg') ) }}" />--}}
+                            <img src="{{ asset( $item->getPublicPrintableFeaturedImage('images/no-pics/no-pic.jpg') ) }}"/>
+                        </div>
+                    </div>
+                </div>
+                {{-- kulcs-érték felsorolások --}}
+                <div class="row">
+                    <div class="col-12">
+                        {{-- zold mezo --}}
+                        <div class="row pdf-key-value-cols">
+                            <div class="col-4">
+                                {{-- Város --}}
+                                <p>
+                                    <b>Város: </b> @if (!empty($item->locationArea)) {{ $item->locationArea->name }} @else
+                                        - @endif </p>
+                                {{-- Ingatlan típus --}}
+                                <p><b>Ingatlan
+                                        típus: </b> @if (!empty($item->realEstateType)) {{ $item->realEstateType->getTranslation(App::getLocale())->name }} @else
+                                        - @endif </p>
+                                {{-- Építés éve/ Emelet --}}
+                                @if($item->realEstateType->real_estate_offer_pdf_green_box === 0)
+                                    <p><b>Építés éve: </b> @if (!empty($item->build_year)) {{ $item->build_year }} @else
+                                            - @endif </p>
+                                @else
+                                    <p>
+                                        <b>Emelet: </b> @if (!empty($item->number_levels)) {{ $item->number_levels }} @else
+                                            - @endif </p>
+                                @endif
+                                {{-- Hálószoba --}}
+                                <p>
+                                    <b>Hálószoba: </b> @if (!empty($item->number_bedroom)) {{ $item->number_bedroom }} @else
+                                        - @endif </p>
+                                {{-- Konyha --}}
+                                <p>
+                                    <b>Konyha: </b> @if (!empty($item->real_estate_kitchen_type_enum)) {{ RealEstateKitchenTypeEnum::getDescription($item->real_estate_kitchen_type_enum) }} @else
+                                        - @endif </p>
+                            </div>
+                            <div class="col-4">
+                                {{-- Kerület --}}
+                                <p>
+                                    <b>Kerület: </b> @if (!empty($item->locationTownDistrict)) {{ $item->locationTownDistrict->name }} @else
+                                        - @endif </p>
+                                {{-- Alapterület --}}
+                                <p>
+                                    <b>Alapterület: </b> @if (!empty($item->base_area_gross)) {{ $item->base_area_gross }} @else
+                                        - @endif m<sup>2</sup></p>
+                                {{-- Felújítás éve/ Építés éve --}}
+                                @if($item->realEstateType->real_estate_offer_pdf_green_box === 0)
+                                    <p><b>Felújítás
+                                            éve: </b> @if (!empty($item->renovation_year))  {{ $item->renovation_year }} @else
+                                            - @endif </p>
+                                @else
+                                    <p><b>Építés
+                                            éve: </b> @if (!empty($item->build_year))  {{ $item->build_year }} @else
+                                            - @endif </p>
+                                @endif
+                                {{-- Fürdô --}}
+                                <p><b>Fürdô: </b> @if (!empty($item->number_bath))  {{ $item->number_bath }} @else
+                                        - @endif </p>
+                                {{-- Tájolás --}}
+                                <p>
+                                    <b>Tájolás: </b> @if (!empty($item->real_estate_orientation_enum)) {{ RealEstateOrientationEnum::getDescription($item->real_estate_orientation_enum) }} @else
+                                        - @endif </p>
+                            </div>
+                            <div class="col-4">
+                                {{-- Városrész/Utcanév --}}
+                                <p>
+                                    @if($realestateoffer->street_address_included == 1)
+                                        <b>Utcanév: </b>
+                                        @if (!empty($item->locationNeighborhood))
+                                            {{ $item->street_address_1 }}
+                                        @else
+                                            -
+                                        @endif
+                                    @else
+                                        <b>Városrész: </b>
+                                        @if (!empty($item->locationNeighborhood))
+                                            {{ $item->locationNeighborhood->name }}
+                                        @else
+                                            -
+                                        @endif
+                                    @endif
+                                </p>
+                                {{-- Irányár ár/ Bérleti dí --}}
+                                @if($item->contract_type_enum == RealEstateContractTypeEnum::elado)
+                                    <p><b>Irányár
+                                            ár: </b> @if (!empty($item->offer_price)) {{ number_format($item->offer_price, 0, ',', '.').' '.$item->currency->iso_code }} @else
+                                            {{'- '.$item->currency->iso_code}} @endif </p>
+                                @else
+                                    <p><b>Bérleti
+                                            díj: </b> @if (!empty($item->offer_price)) {{ number_format($item->offer_price, 0, ',', '.').' '.$item->currency->iso_code }} @else
+                                            {{'- '.$item->currency->iso_code}} @endif </p>
+                                @endif
+                                {{-- Telekterület/ Felújítás éve --}}
+                                @if($item->realEstateType->real_estate_offer_pdf_green_box === 0)
+                                    <p><b>Telekterület: </b> @if (!empty($item->lot_size)) {{ $item->lot_size }} @else
+                                            - @endif </p>
+                                @else
+                                    <p><b>Felújítás
+                                            éve: </b> @if (!empty($item->renovation_year)) {{ $item->renovation_year }} @else
+                                            - @endif </p>
+                                @endif
+                                {{-- Zuhany --}}
+                                <p><b>Zuhany: </b> @if (!empty($item->number_shower)) {{ $item->number_shower }} @else
+                                        - @endif </p>
+                                {{-- Garázs/ Terasz --}}
+                                @if($item->realEstateType->real_estate_offer_pdf_green_box === 0)
+                                    <p>
+                                        <b>Garázs: </b> @if (!empty($item->number_garage)) {{ $item->number_garage }} @else
+                                            - @endif </p>
+                                @else
+                                    <p><b>Terasz: </b> @if (!empty($item->terrace) && ($item->terrace > 0)) Igen @else
+                                            Nem @endif </p>
+                                @endif
+                            </div>
+                        </div>
+                        {{-- Pipas resz --}}
+                        <div class="row pdf-key-value-cols-pipe">
+                            @if(!empty($item->getFeatures()))
+                                @foreach(array_chunk($item->getFeatures(), (ceil(count($item->getFeatures())/3)), true) as $featureChunk)
+                                    <div class="col-{{ 12 / 3 }} pdf-feature-cols">
+                                        @foreach($featureChunk as $featureData)
+                                            @if($loop->index <= 3)
+                                                <p><i class="fas fa-check"></i> <b>{{ $featureData }}</b></p>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6 pdf-description">
+                        <h1><b>Leírás:</b></h1>
+{{--                        <h1><b>Description:</b></h1>--}}
+                        <p>{!! \Illuminate\Support\Str::limit(strip_tags($item->getTranslation(App::getLocale())->description), 300,'(...)' ) !!}</p>
+                    </div>
+                    <div class="col-6 pdf-description-image">
+                        @foreach($item->getMedia('images')->slice(1) as $media)
+                            @if($loop->first)
+                                <img src="{{ asset($media->getUrl('public-realestate-datapage-gallery-image')) }}"/>
+                            @endif
+                        @endforeach
+                        {{--                        <p><img src="{{ asset( $item->getPublicPrintableFeaturedImage('images/no-pics/no-pic.jpg') ) }}" /></p>--}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 pdf-foot-ticket">
+                        <p>Please note that all information was obtained from the property owners and some conditions
+                            might be subject to change without prior notice.</p>
+                    </div>
+                </div>
+                {{-- pdf-ben: oldaltörés --}}
+                <div class="new-page"></div>
+                @if($realestateoffer->one_page_limit != 1)
+                    <div class="container pdf-header">
+                        <div class="row">
+                            <div class="col-4 pdf-logo">
+                                @if($realestateoffer->crop_logo_included == 1)
+                                    <img src="{{ asset('images/logo/realhome-logo01.png') }}"/>
+                                @endif
+                            </div>
+
+                            <div class="offset-3 col-5 pdf-address">
+                                <p>
+                                    1095 Budapest, Lechner Ödön fasor 2.<br/>
+                                    +36 70 335 8000, +36 1 335 8000<br/>
+                                    web: realhome.hu, email: info@realhome.hu
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8 pdf-public-name">
+                            <h1>{{ $item->getPublicName() }}</h1>
+                        </div>
+                        <div class="col-4 pdf-code text-right">
+                            <h1>ID: {{ $item->code }}</h1>
+                        </div>
+                    </div>
+                    {{-- fokep 2.oldalom --}}
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="pdf-main-image">
+                                @foreach($item->getMedia('images')->slice(2) as $media)
+                                    @if($loop->first)
+                                        <img src="{{ asset($media->getUrl('public-realestate-datapage-gallery-image')) }}"/>
+                                    @endif
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                    {{-- Dupla kep 1 sor --}}
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                {{-- @foreach($item->getMedia('images')->slice(3) as $media) --}}
+                                @foreach($item->getMedia('images')->slice(3) as $media)
+                                    @if($loop->index < 2)
+                                        <div class="col-6 pdf-flex-image">
+                                            <img src="{{ asset($media->getUrl('public-realestate-datapage-gallery-image')) }}"/>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                    {{-- Dupla kep 2 sor --}}
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                {{-- @foreach($item->getMedia('images')->slice(3) as $media) --}}
+                                @foreach($item->getMedia('images')->slice(5) as $media)
+                                        <div class="col-6 pdf-flex-image">
+                                            <img src="{{ asset($media->getUrl('public-realestate-datapage-gallery-image')) }}"/>
+                                        </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 pdf-foot-ticket">
+                            <!-- <p>Please note that all information was obtained from the property owners and some conditions might be subject to change without prior notice.</p> -->
+                            <p class="text-center">Jelen ajánlatban közölt adatok és tények kizárólag tájékoztató jellegűek, nem minősülnek szerződéskötés ajánlatnak. A változtatás jogát fenntartjuk.</p>
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </div>
+    @endforeach
+@endsection
